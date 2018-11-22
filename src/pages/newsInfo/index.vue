@@ -2,7 +2,7 @@
 <div class="news-info-container">
     <div class="title">{{newsInfo.title}}</div>
     <div class="subtitle">
-        <span class="ctime">发表时间：{{newsInfo.add_time | dataFormat}}</span>
+        <span class="ctime">发表时间：{{newsInfo.add_time | dateFormat}}</span>
         <span class="click">点击：{{newsInfo.click}}次</span>  
     </div>
     <hr>

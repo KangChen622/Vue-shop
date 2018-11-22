@@ -6,8 +6,10 @@
         "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
       }
     }],
+    
     "stage-2"
   ],
+  "ignore":[ "./src/lib/mui/js/*.js" ],
   "plugins": ["transform-vue-jsx", "transform-runtime", ["component", [
     {
       "libraryName": "mint-ui",

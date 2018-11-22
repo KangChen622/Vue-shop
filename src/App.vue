@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 头部 -->
-    <mt-header fixed title="云购"></mt-header>
+    <mt-header fixed title="云购" style="z-index:999"></mt-header>
   <!-- 底部 -->
   <nav class="mui-bar mui-bar-tab">
 			<router-link class="mui-tab-item " to="/home">
@@ -31,8 +31,15 @@
 </template>
 
 <script>
+
 export default {
-  name: "App"
+	name: "App",
+	//  mounted(){
+  //         // a标签默认跳转
+  //   mui("body").on("tap", "a", function() {
+  //     window.top.location.href = this.href;
+  //   });
+  // },
 };
 </script>
 
