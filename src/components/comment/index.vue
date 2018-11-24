@@ -60,6 +60,7 @@ export default {
 </script>
 <style lang="less">
 .comment-container {
+    padding: 10px;
   textarea{
       height: 80px;
       padding: 5px;
