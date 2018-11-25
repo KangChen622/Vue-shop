@@ -1,7 +1,7 @@
 <template>
     <div class="goodsInfo-container">
         <!-- 小球 -->
-        <transition
+       <transition
       @before-enter="beforeEnter"
       @enter="enter"
       @after-enter="afterEnter">
@@ -23,7 +23,7 @@
               <div class="bnt"> 购买数量：</div>
                <div class="number">
                   <span class="reduce" @click="reduceCount">-</span>
-                  <input type="text" class="count" v-model="vcount"></input>
+                  <input type="text" class="count" v-model="vcount">
                   <span class="add" @click="addCount">+</span>
                </div>
            </div>
@@ -51,11 +51,10 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      lunbotu: [],
-      goodsinfo: {},
-      ballFlag:false,
-      vcount:'1'
-      
+      lunbotu: [], //轮播图信息
+      goodsinfo: {}, //商品信息
+      ballFlag: false, //小球状态值
+      vcount: "1" //设置默认值
     };
   },
   created() {
@@ -71,7 +70,6 @@ export default {
             item.img = item.src;
           });
 
-     
           this.lunbotu = result.body.message;
         }
       });
@@ -92,38 +90,52 @@ export default {
       // 跳转到评论页面
       this.$router.push({ name: "goodscomment", params: { id } });
     },
-    // 小圆点动画
-    addToShopCar(){
-        this.ballFlag=!this.ballFlag;
-        console.log('aaa')
+    // 小圆点动画 加入购物车
+    addToShopCar() {
+      this.ballFlag = !this.ballFlag;
+      // 存储商品信息存储到全局中
+      var GoodsInfo = {
+        id: this.id, //商品id
+        count: parseInt(this.vcount), //商品数量
+        price: this.goodsinfo.sell_price, //商品价格
+        selected: true //是否选中
+      };
+      // 调用store中的mutations来讲商品加入购物车
+      this.$store.commit('addToCar',GoodsInfo)
     },
-    beforeEnter(el){
+      beforeEnter(el) {
       el.style.transform = "translate(0, 0)";
     },
-    enter(el,done){
-        el.offsetWidth;
-        // 小球在页面中的位置
-         const ballPosition = this.$refs.ball.getBoundingClientRect();
-        const badgePosition=document.getElementById('badge').getBoundingClientRect();
-    const xDist = badgePosition.left - ballPosition.left;
-      const yDist = badgePosition.top - ballPosition.top;
-      el.style.transform = `translate(${xDist}px, ${yDist}px)`;
-      el.style.transition = "all 3s cubic-bezier(.4,-0.3,1,.68)";
-      console.log(xDist+'-----'+yDist)
-      done();
+    enter(el, done) {
+      el.offsetWidth;
 
+      const ballPosition = this.$refs.ball.getBoundingClientRect();
+      // 获取 徽标 在页面中的位置
+      const badgePosition = document
+        .getElementById("badge")
+        .getBoundingClientRect();
+
+      const xDist = badgePosition.left - ballPosition.left;
+      const yDist = badgePosition.top - ballPosition.top;
+
+      el.style.transform = `translate(${xDist}px, ${yDist}px)`;
+      el.style.transition = "all 2s cubic-bezier(.4,-0.3,1,.68)";
+      done();
     },
-    afterEnter(el){
-        this.ballFlag=!this.ballFlag;
+    afterEnter(el) {
+      this.ballFlag = !this.ballFlag;
     },
-    addCount(){
+    addCount() {
       // let a =document.getElementsByClassName('count').innerHTML;
-    this.vcount++
+      this.vcount++;
+      if (this.vcount >= this.goodsinfo.stock_quantity) {
+        return (this.vcount = this.goodsinfo.stock_quantity);
+      }
     },
-    reduceCount(){
+    reduceCount() {
       this.vcount--;
-      if(this.vcount<=1){
-        return this.vcount=1;
+      if (this.vcount <= 1) {
+        return (this.vcount = 1);
       }
     }
   },
@@ -136,6 +148,7 @@ export default {
 .goodsInfo-container {
   background-color: #fff;
   padding: 10px;
+  position: relative;
   .buy {
     padding: 10px;
     margin-bottom: 50px;
@@ -213,7 +226,8 @@ export default {
         border-left: 1px solid #ccc;
       }
       .count {
-        height: 28px;float: left;
+        height: 28px;
+        float: left;
         text-align: center;
         border: 0;
         background-color: #fff;
@@ -227,7 +241,7 @@ export default {
     border-radius: 50%;
     background-color: red;
     position: absolute;
-    z-index: 99;
+    z-index: 99999999999;
     top: 408px;
     left: 172px;
   }
